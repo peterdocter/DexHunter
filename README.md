@@ -1,13 +1,16 @@
 # DexHunter
+
+#####NOTICE： The feature string is very important. It may be changed along with the evolution of hardening services. If it is incorrect, the unpacking process cannot be triggered. DexHunter leverages "fwrite" and other libc functions to manipulate files. But these functions are hooked by hardening services resulting in the crash of the process. As a result, you cannot utilize the provided image to unpack the latest hardedning services. You had better replace these functions with the direct system calls to avoid crash.
+
 DexHunter aims at unpacking hardened dex file automatically.
 
 DexHunter is based on the source code of Android runtime. It is composed of modified ART and DVM runtime. You can use the modified runtime to replace the original content in Android source codes (Android 4.4.3). The modification is mainly in "art/runtime/class_linker.cc" (ART) and "dalvik/vm/native/dalvik_system_DexFile.cpp" (DVM).
 
-Usgae:
+###Usage:
 
 If you want to unpack an app, you need to push the "dexname" file to "/data/" in the mobile before starting the app. The first line in "dexname" is the feature string (referring to "slide.pptx"). The second line is the data path of the target app (e.g. "/data/data/com.test.test/"). Its line ending should be in the style of Unix/Linux. You can observe the log using "logcat" to determine whether the unpacking procedure is finished. Once done, the generated "whole.dex" file is the wanted result which is located in the app's data directory.
 
-Tips:
+###Tips:
 
 1) DexHunter simply reuses the content before "class_def" section instead of parsing them for the efficiency. If there are some problems, you can parse and reassemble them again or amend them statically.
 
@@ -21,9 +24,9 @@ Tips:
 
 DexHunter has its own limitation. As the hardening services develop, DexHunter may be not effective in the future. If you are interested, you can amend DexHunter to keep pace with hardening services continuously.
 
-File description:
+###File description:
 
-"slide.pptx" is the presentation material of HITCON 2015 depicting the design and implementation of DexHunter.
+"slide.pptx" is the presentation material of HITCON 2015 (http://hitcon.org/2015/ENT/Activities-Enterprise-Agenda.html#zyq) depicting the design and implementation of DexHunter.
 
 "demo.mp4" is the demonstration video of unpacking a hardened app by Ali.
 
@@ -48,3 +51,7 @@ Title = {DexHunter: Toward Extracting Hidden Code from Packed Android Applicatio
 Author = {Yueqian Zhang and Xiapu Luo and Haoyang Yin},
 Booktitle = {Proc. ESORICS},
 Year = {2015}}
+
+#####Comment: 
+
+I have tested the samples from 360 in July under DVM. The feature string is changed to "/data/app/XXX.apk" (referring to "silde.pptx"). This string is very important. If it is incorrect, the unpacking process will fail.
